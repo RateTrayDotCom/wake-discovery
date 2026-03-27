@@ -15,7 +15,7 @@ export async function GET() {
 
     // Group by municipality
     const townGroups: Record<string, WakeEvent[]> = {};
-    events.forEach(event => {
+    events.forEach((event: WakeEvent) => {
       const town = event.municipality || 'Wake County';
       if (!townGroups[town]) townGroups[town] = [];
       townGroups[town].push(event);
