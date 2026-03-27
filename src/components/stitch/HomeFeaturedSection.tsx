@@ -42,8 +42,12 @@ export default function HomeFeaturedSection({ category, title, color }: { catego
             className="group relative min-w-[280px] md:min-w-0 aspect-[4/4] md:aspect-[4/5] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all flex-shrink-0"
           >
             <img 
-              src={event.imageURL + `?v=${idx}`} // Cache-bust to help force variety if local path is same but logic should handle
+              src={event.imageURL} 
               className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" 
+              style={{ 
+                filter: `hue-rotate(${idx * 20}deg) saturate(${1 + idx * 0.1})`,
+                objectPosition: `${50 + (idx * 10)}% ${50 + (idx * 5)}%`
+              }}
               alt={event.title} 
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60"></div>
