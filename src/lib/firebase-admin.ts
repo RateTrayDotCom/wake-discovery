@@ -2,10 +2,14 @@ import * as admin from 'firebase-admin';
 
 function getAdminApp() {
   if (!admin.apps.length) {
+    const saString = process.env.FIREBASE_SERVICE_ACCOUNT;
+    if (!saString || saString === '{}') {
+      console.warn('FIREBASE_SERVICE_ACCOUNT is missing. Skipping admin initialization.');
+      return null;
+    }
+
     try {
-      const serviceAccount = JSON.parse(
-        process.env.FIREBASE_SERVICE_ACCOUNT || '{}'
-      );
+      const serviceAccount = JSON.parse(saString);
 
       // Sanitize private key for PEM format
       if (serviceAccount.private_key) {
@@ -18,12 +22,12 @@ function getAdminApp() {
       });
     } catch (error) {
       console.error('Firebase admin initialization error', error);
-      throw error;
+      return null;
     }
   }
   return admin.app();
 }
 
 const app = getAdminApp();
-export const adminDb = app.firestore();
-export const adminAuth = app.auth();
+export const adminDb = app ? app.firestore() : null as any;
+export const adminAuth = app ? app.auth() : null as any;

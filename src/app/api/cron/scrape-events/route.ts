@@ -80,7 +80,7 @@ async function scrapeTownGeneric(municipality: string, url: string, itemSelector
     });
 
     if (events.length > 0) {
-      if (!events.some(e => e.title.toLowerCase().includes('kid'))) {
+      if (!events.some(e => e.title?.toLowerCase().includes('kid'))) {
          events.push({
            title: `Family Discovery Day in ${municipality}`,
            date: "March 26, 2026",
@@ -92,7 +92,7 @@ async function scrapeTownGeneric(municipality: string, url: string, itemSelector
            kidFriendly: true
          });
       }
-      if (!events.some(e => e.title.toLowerCase().includes('food'))) {
+      if (!events.some(e => e.title?.toLowerCase().includes('food'))) {
          events.push({
            title: `${municipality} Food & Drink Exploration`,
            date: "March 27, 2026",
@@ -142,11 +142,11 @@ export async function GET() {
         count: allEvents.length,
         status: 'success'
       });
-    } catch (e) {
+    } catch (err: any) {
       status = 'error';
       await adminDb.collection('scraper_logs').add({
         timestamp: new Date().toISOString(),
-        error: e.toString(),
+        error: err?.toString() || 'Unknown error',
         status: 'error'
       });
     }
