@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { WakeEvent } from '@/constants/mockData';
 
 export async function POST(req: Request) {
   const { followedTowns } = await req.json();
