@@ -11,7 +11,7 @@ export async function GET() {
   try {
     const eventsRef = adminDb.collection('events');
     const snapshot = await eventsRef.get();
-    const events = snapshot.docs.map(doc => doc.data() as WakeEvent);
+    const events = snapshot.docs.map((doc: any) => doc.data() as WakeEvent);
 
     // Group by municipality
     const townGroups: Record<string, WakeEvent[]> = {};

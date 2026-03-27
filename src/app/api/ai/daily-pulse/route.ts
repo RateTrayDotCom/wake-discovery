@@ -18,8 +18,8 @@ export async function POST(req: Request) {
       .limit(10)
       .get();
 
-    const events = eventsSnapshot.docs.map(doc => doc.data() as WakeEvent);
-    const contextString = events.map(e => `${e.municipality}: ${e.title} (${e.date})`).join(', ');
+    const events = eventsSnapshot.docs.map((doc: any) => doc.data() as WakeEvent);
+    const contextString = events.map((e: WakeEvent) => `${e.municipality}: ${e.title} (${e.date})`).join(', ');
 
     if (!apiKey) {
        return NextResponse.json({ 
