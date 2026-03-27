@@ -10,10 +10,10 @@ export async function GET() {
   try {
     const eventsRef = adminDb.collection('events');
     const snapshot = await eventsRef.get();
-    const events = snapshot.docs.map(doc => doc.data());
+    const events = snapshot.docs.map(doc => doc.data() as WakeEvent);
 
     // Group by municipality
-    const townGroups: Record<string, any[]> = {};
+    const townGroups: Record<string, WakeEvent[]> = {};
     events.forEach(event => {
       const town = event.municipality || 'Wake County';
       if (!townGroups[town]) townGroups[town] = [];
