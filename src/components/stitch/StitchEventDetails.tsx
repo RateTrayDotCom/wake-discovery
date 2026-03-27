@@ -84,7 +84,7 @@ export default function StitchEventDetails({ event }: Props) {
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => toggleSaveEvent(event.id)}
-                className="w-12 h-12 flex items-center justify-center text-slate-900 transition-all hover:scale-110 active:scale-90"
+                className="w-12 h-12 flex items-center justify-center text-[#001f3f] transition-all hover:scale-110 active:scale-90 bg-transparent"
               >
                 <span className={`material-symbols-outlined text-2xl ${saved ? 'fill-1' : ''}`}>
                   {saved ? 'bookmark_added' : 'bookmark_add'}

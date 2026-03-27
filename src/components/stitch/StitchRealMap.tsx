@@ -39,10 +39,13 @@ export default function StitchRealMap({ fullScreen = false, city }: StitchRealMa
   const [events, setEvents] = React.useState<WakeEvent[]>([]);
   const [L, setL] = React.useState<any>(null);
   const [mounted, setMounted] = React.useState(false);
+  const [myLocation, setMyLocation] = React.useState<[number, number] | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState('');
+  
+  const router = typeof window !== 'undefined' ? require('next/navigation').useRouter() : null;
 
   React.useEffect(() => {
     setMounted(true);
-    // Load Leaflet on client side
     import('leaflet').then((leaflet) => {
       setL(leaflet);
     });
@@ -65,18 +68,16 @@ export default function StitchRealMap({ fullScreen = false, city }: StitchRealMa
 
   const mapCenter = React.useMemo(() => {
     if (!city) return [35.7796, -78.6382] as [number, number];
-    const slug = city.toLowerCase().replace(/ /g, '-');
+    const slug = city.toLowerCase().replace(/ /g, '-').replace(/-/g, '-');
     return CITY_COORDS[slug] || [35.7796, -78.6382];
   }, [city]);
 
-  // Stable jitter for each event
   const eventPositions = React.useMemo(() => {
     return filteredEvents.map(event => {
       const slug = event.municipality?.toLowerCase().replace(/ /g, '-');
       const basePos = CITY_COORDS[slug || ''];
       if (!basePos) return null;
 
-      // Use a consistent hash of the ID for deterministic jitter
       const hash = event.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
       const jitterX = ((hash % 100) / 100 - 0.5) * 0.01;
       const jitterY = (((hash * 13) % 100) / 100 - 0.5) * 0.01;
@@ -88,30 +89,6 @@ export default function StitchRealMap({ fullScreen = false, city }: StitchRealMa
       };
     }).filter(p => p !== null);
   }, [filteredEvents]);
-
-  if (!mounted) {
-    return <div className={`${fullScreen ? 'h-[500px]' : 'aspect-square'} w-full bg-slate-100 animate-pulse rounded-3xl`} />;
-  }
-
-  return (
-    <div className={`relative w-full ${fullScreen ? 'h-[500px] rounded-none md:rounded-3xl' : 'aspect-square max-w-[400px]'} mx-auto bg-surface-container rounded-3xl overflow-hidden border border-outline-variant/30 group shadow-2xl`}>
-      <div className="absolute top-4 left-4 z-[1000] pointer-events-none">
-        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-800 bg-white/80 backdrop-blur px-2 py-1 rounded-md mb-1 shadow-sm">Geographic Pulse</h4>
-        <p className={`${fullScreen ? 'text-2xl' : 'text-lg'} font-black font-headline text-slate-900 drop-shadow-sm uppercase`}>{city ? `${city} Pulse` : 'WAKE ATLAS'}</p>
-      </div>
-
-      {!fullScreen && (
-        <Link 
-          href="/map"
-          className="absolute top-4 right-4 z-[1000] bg-white/80 backdrop-blur p-2 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all group/expand"
-        >
-          <span className="material-symbols-outlined text-sm">open_in_full</span>
-        </Link>
-      )}
-
-  const router = typeof window !== 'undefined' ? require('next/navigation').useRouter() : null;
-  const [myLocation, setMyLocation] = React.useState<[number, number] | null>(null);
-  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleSetLocation = () => {
     const slug = searchQuery.toLowerCase().trim().replace(/ /g, '-');

@@ -40,17 +40,24 @@ export default function CityNewsPage() {
               <p className="text-on-surface-variant text-sm mt-2 opacity-60 font-body uppercase tracking-[0.2em]">The best things to do, see, and eat in {cityName}</p>
            </div>
            
-           <button 
-            onClick={() => toggleFollowTown(cityName)}
-            className={`px-6 py-3 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 ${
-              following 
-                ? "bg-primary text-on-primary shadow-lg" 
-                : "bg-surface-container-highest text-on-surface-variant hover:bg-primary/5 hover:text-primary border border-outline-variant/30"
-            }`}
-           >
-             <span className="material-symbols-outlined text-sm">{following ? 'check' : 'add'}</span>
-             {following ? 'Following Town' : 'Follow Town'}
-           </button>
+            <div className="flex items-center gap-3">
+              {following && (
+                <span className="hidden sm:inline-block px-3 py-1 bg-primary/10 text-primary text-[8px] font-black uppercase tracking-widest rounded-full animate-fade-in">
+                  Priority Discovery Active
+                </span>
+              )}
+              <button 
+                onClick={() => toggleFollowTown(cityName)}
+                className={`px-6 py-3 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 ${
+                  following 
+                    ? "bg-primary text-white shadow-lg" 
+                    : "bg-surface-container-highest text-on-surface-variant hover:bg-primary/5 hover:text-primary border border-outline-variant/30"
+                }`}
+              >
+                <span className="material-symbols-outlined text-sm">{following ? 'check_circle' : 'add_circle'}</span>
+                {following ? 'Following Town' : 'Follow Town'}
+              </button>
+            </div>
         </div>
         <div className="flex flex-col md:flex-row">
           <div className="flex-1 md:border-r md:border-outline-variant/30 min-w-0">
