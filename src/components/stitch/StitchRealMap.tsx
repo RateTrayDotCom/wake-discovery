@@ -109,6 +109,55 @@ export default function StitchRealMap({ fullScreen = false, city }: StitchRealMa
         </Link>
       )}
 
+  const router = typeof window !== 'undefined' ? require('next/navigation').useRouter() : null;
+  const [myLocation, setMyLocation] = React.useState<[number, number] | null>(null);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const handleSetLocation = () => {
+    const slug = searchQuery.toLowerCase().trim().replace(/ /g, '-');
+    if (CITY_COORDS[slug]) {
+      setMyLocation(CITY_COORDS[slug]);
+    }
+  };
+
+  if (!mounted) {
+    return <div className={`${fullScreen ? 'h-[500px]' : 'aspect-square'} w-full bg-slate-100 animate-pulse rounded-3xl`} />;
+  }
+
+  return (
+    <div className={`relative w-full ${fullScreen ? 'h-[500px] rounded-none md:rounded-3xl' : 'aspect-square max-w-[400px]'} mx-auto bg-surface-container rounded-3xl overflow-hidden border border-outline-variant/30 group shadow-2xl`}>
+      <div className="absolute top-4 left-4 z-[1000] pointer-events-none">
+        <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-800 bg-white/80 backdrop-blur px-2 py-1 rounded-md mb-1 shadow-sm">Geographic Pulse</h4>
+        <p className={`${fullScreen ? 'text-2xl' : 'text-lg'} font-black font-headline text-slate-900 drop-shadow-sm uppercase`}>{city ? `${city} Pulse` : 'WAKE ATLAS'}</p>
+      </div>
+
+      <div className="absolute top-4 right-4 z-[1000] flex flex-col items-end gap-2">
+        {!fullScreen ? (
+          <Link 
+            href="/map"
+            className="bg-white/80 backdrop-blur p-2 rounded-full shadow-lg hover:bg-primary hover:text-white transition-all group/expand"
+          >
+            <span className="material-symbols-outlined text-sm">open_in_full</span>
+          </Link>
+        ) : (
+          <div className="flex gap-2 bg-white/90 backdrop-blur p-2 rounded-2xl shadow-xl border border-outline-variant/20">
+            <input 
+              type="text" 
+              placeholder="Enter City..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-widest text-slate-900 w-32 px-2"
+            />
+            <button 
+              onClick={handleSetLocation}
+              className="bg-primary text-white p-2 rounded-xl"
+            >
+              <span className="material-symbols-outlined text-sm">my_location</span>
+            </button>
+          </div>
+        )}
+      </div>
+
       <MapContainer 
         center={mapCenter} 
         zoom={city ? 13 : (fullScreen ? 11 : 10)} 
@@ -121,11 +170,27 @@ export default function StitchRealMap({ fullScreen = false, city }: StitchRealMa
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
         
+        {myLocation && (
+          <Marker 
+            position={myLocation}
+            icon={L ? L.divIcon({
+              className: 'my-location-icon',
+              html: `<div class="flex items-center justify-center">
+                      <div class="w-4 h-4 bg-red-600 rounded-full border-2 border-white shadow-2xl"></div>
+                      <div class="absolute w-8 h-8 bg-red-600/30 rounded-full animate-ping"></div>
+                     </div>`,
+              iconSize: [30, 30],
+              iconAnchor: [15, 15],
+            }) : undefined}
+          >
+            <Popup><span className="text-[10px] font-black uppercase">Your Location</span></Popup>
+          </Marker>
+        )}
+
         {eventPositions.map(({ id, position, event }) => {
-          // Custom Icon using divIcon
           const customIcon = L ? L.divIcon({
             className: 'custom-div-icon',
-            html: `<div class="flex items-center justify-center">
+            html: `<div class="flex items-center justify-center cursor-pointer">
                     <span class="material-symbols-outlined text-primary text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] animate-bounce-subtle">location_on</span>
                     <div class="absolute w-4 h-4 bg-primary/20 rounded-full animate-ping"></div>
                    </div>`,
@@ -138,10 +203,13 @@ export default function StitchRealMap({ fullScreen = false, city }: StitchRealMa
               key={id} 
               position={position}
               icon={customIcon}
+              eventHandlers={{
+                click: () => router?.push(`/events/${id}`)
+              }}
             >
               <Popup className="premium-popup">
-                <div className="p-1 max-w-[150px]">
-                  <h6 className="text-[10px] font-black uppercase tracking-tight text-slate-900 border-b border-slate-100 pb-1 mb-1">{event.title}</h6>
+                <div className="p-1 max-w-[150px] cursor-pointer" onClick={() => router?.push(`/events/${id}`)}>
+                  <h6 className="text-[10px] font-black uppercase tracking-tight text-slate-900 border-b border-slate-100 pb-1 mb-1 hover:text-primary transition-colors">{event.title}</h6>
                   <p className="text-[8px] text-primary font-bold uppercase tracking-widest">{event.municipality} • {event.time || 'All Day'}</p>
                 </div>
               </Popup>
