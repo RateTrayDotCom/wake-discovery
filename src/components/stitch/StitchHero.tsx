@@ -21,8 +21,8 @@ export default function StitchHero({ event }: StitchHeroProps) {
         className="absolute inset-0 w-full h-full object-cover" 
         src={displayImage}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent"></div>
-      <div className="relative z-10 p-10 w-full pb-16">
+      <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/20 to-transparent pt-20"></div>
+      <div className="relative z-10 p-6 md:p-10 w-full pb-16">
         <span className="inline-block px-3 py-1 bg-tertiary text-on-tertiary text-[10px] font-black uppercase tracking-widest rounded-full mb-4 animate-pulse">
           {event ? "Activity of the Day" : "Featured Guide"}
         </span>

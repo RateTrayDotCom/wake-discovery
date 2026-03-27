@@ -1,25 +1,39 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import StitchHeader from "@/components/stitch/StitchHeader";
 import StitchEventDetails from "@/components/stitch/StitchEventDetails";
 import StitchBottomNav from "@/components/stitch/StitchBottomNav";
+import { db } from '@/lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { WakeEvent } from '@/constants/mockData';
 
 export default function EventDetailPage() {
   const params = useParams();
-  const id = params?.id;
+  const id = params?.id as string;
+  const [event, setEvent] = useState<WakeEvent | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Mock event data for demonstration
-  const event = {
-    title: "Street Food Festival 2025",
-    date: "Saturday, Oct 24, 2025",
-    time: "12:00 PM - 8:00 PM",
-    location: "Central Plaza, Main St.",
-    category: "Food & Culture",
-    description: "Experience the city's most vibrant culinary celebration. With over 50 local vendors, live music performances, and interactive cooking workshops, the Street Food Festival is our community's largest gathering of the season.\n\nJoin us for a day of discovery as we celebrate the diverse flavors that make our town unique. From artisanal sourdough to authentic street tacos, there's something for every palate.",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDtSs_tN-TtJSJDEwanA8dWoz4_2sjNdNt66-eRMFy1xjj9X7Xls5g4Z9aGuQ6oTberRDPmAXLGOxq588KsOb8EOet29c45JkUA28kRFizg64PXhdFCcv35QtrPZ_oyfraS9ZS_bz2udImyQc4qUlYh8_CLVYp6G9UpEav-h05nFdShamM9I3niLzEsCH1jKUFfVYT2KJmVT3GzLQTBPjk6JebRrkJlc7VktoTQe_cJS9v4yLopDZiOHri7r07m51ncxjrYl8NXefk"
-  };
+  useEffect(() => {
+    if (!id) return;
+    const loadEvent = async () => {
+      try {
+        const docSnap = await getDoc(doc(db, 'events', id));
+        if (docSnap.exists()) {
+          setEvent({ id: docSnap.id, ...docSnap.data() } as WakeEvent);
+        }
+      } catch (e) {
+        console.error("Event load error:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadEvent();
+  }, [id]);
+
+  if (loading) return <div className="min-h-screen bg-slate-950"></div>;
+  if (!event) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">Event not found</div>;
 
   return (
     <div className="min-h-screen bg-surface">

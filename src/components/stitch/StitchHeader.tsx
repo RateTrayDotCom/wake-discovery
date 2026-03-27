@@ -22,20 +22,23 @@ export default function StitchHeader() {
           <Link href="/" className="text-xl font-black text-slate-900 dark:text-slate-50 uppercase tracking-widest font-headline cursor-pointer">Wake Discovery</Link>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <button 
             onClick={() => setKidFriendlyOnly(!preferences.kidFriendlyOnly)}
-            className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full transition-all border font-black text-[10px] uppercase tracking-widest ${
+            className={`flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-full transition-all border font-black text-[9px] md:text-[10px] uppercase tracking-widest ${
               preferences.kidFriendlyOnly 
-                ? "bg-primary text-white border-primary shadow-lg scale-105" 
+                ? "bg-primary text-white border-primary shadow-sm" 
                 : "bg-surface-container text-on-surface-variant/40 border-outline-variant/30 hover:bg-surface-container-high"
             }`}
           >
             <span className="material-symbols-outlined text-sm text-inherit">child_care</span>
-            Parent Mode
+            <span className="hidden sm:inline">Parent Mode</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
+            <Link href="/" className="hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-100 p-2 rounded-lg block md:hidden">
+              <span className="material-symbols-outlined text-slate-900 dark:text-slate-50">calendar_month</span>
+            </Link>
             <Link href="/map" className="hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors active:scale-95 duration-100 p-2 rounded-lg">
               <span className="material-symbols-outlined text-slate-900 dark:text-slate-50">map</span>
             </Link>

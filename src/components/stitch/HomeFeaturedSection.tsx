@@ -34,10 +34,18 @@ export default function HomeFeaturedSection({ category, title, color }: { catego
         <h2 className="text-3xl font-black font-headline uppercase tracking-tighter text-on-surface">{title}</h2>
         <Link href={`/news/category/${category}`} className={`px-4 py-2 rounded-full border border-outline-variant/30 text-[8px] font-black uppercase tracking-widest hover:border-primary transition-colors cursor-pointer`}>View All &rarr;</Link>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {events.map((event) => (
-          <Link key={event.id} href={`/events/${event.id}`} className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all">
-            <img src={event.imageURL} className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" alt={event.title} />
+      <div className="flex overflow-x-auto no-scrollbar gap-6 pb-4 md:grid md:grid-cols-3 -mx-6 px-6 md:mx-0 md:px-0">
+        {events.map((event, idx) => (
+          <Link 
+            key={event.id} 
+            href={`/events/${event.id}`} 
+            className="group relative min-w-[280px] md:min-w-0 aspect-[4/4] md:aspect-[4/5] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all flex-shrink-0"
+          >
+            <img 
+              src={event.imageURL + `?v=${idx}`} // Cache-bust to help force variety if local path is same but logic should handle
+              className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-700" 
+              alt={event.title} 
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60"></div>
             <div className="absolute bottom-6 left-6 right-6">
               <span className={`px-2 py-0.5 rounded-full ${color} text-white text-[8px] font-black uppercase tracking-widest mb-3 inline-block`}>{event.municipality}</span>

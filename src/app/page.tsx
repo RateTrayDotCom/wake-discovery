@@ -53,8 +53,8 @@ export default function HomeHubPage() {
             <div className="mt-16">
               <div className="px-6 mb-8 flex justify-between items-end">
                 <div>
-                  <h2 className="text-3xl font-black font-headline tracking-tighter text-on-surface uppercase">Regional Concerts</h2>
-                  <p className="text-xs font-bold text-primary uppercase tracking-[0.2em] mt-2">Live Music Under the Stars</p>
+                  <h2 className="text-3xl font-black font-headline tracking-tighter text-on-surface uppercase">Live Experiences</h2>
+                  <p className="text-xs font-bold text-primary uppercase tracking-[0.2em] mt-2">The County's Essential Performance Pulse</p>
                 </div>
                 <Link href="/news/category/concerts" className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline cursor-pointer">View All &rarr;</Link>
               </div>
