@@ -14,8 +14,11 @@ export default function HomeFeaturedSection({ category, title, color }: { catego
       const all = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as WakeEvent[];
       const filtered = all.filter(e => {
         const content = (e.title + (e.description || '')).toLowerCase();
-        if (category === 'kids') return content.includes('kid') || content.includes('family');
-        if (category === 'food') return content.includes('food') || content.includes('drink') || content.includes('market');
+        const isKids = category === 'kids';
+        const isFood = category === 'food' || category === 'food-drink';
+        
+        if (isKids) return content.includes('kid') || content.includes('family');
+        if (isFood) return content.includes('food') || content.includes('drink') || content.includes('market');
         return false;
       }).slice(0, 3);
       setEvents(filtered);

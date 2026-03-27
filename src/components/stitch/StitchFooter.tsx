@@ -7,10 +7,10 @@ const FOOTER_LINKS = [
   {
     title: "Discovery",
     links: [
-      { name: "Events", href: "/events" },
-      { name: "Concerts", href: "/concerts" },
-      { name: "For Kids", href: "/kids" },
-      { name: "Food & Drink", href: "/food-drink" },
+      { name: "Events", href: "/map" },
+      { name: "Concerts", href: "/news/category/concerts" },
+      { name: "For Kids", href: "/news/category/kids" },
+      { name: "Food & Drink", href: "/news/category/food-drink" },
       { name: "Wake Atlas", href: "/map" }
     ]
   },
